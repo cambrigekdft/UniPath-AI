@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniPath AI - 公益升学助手</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,7 +21,7 @@
 </head>
 <body class="text-slate-800">
 
-    <!-- Header -->
+    <!-- Header / 导航栏 -->
     <nav class="sticky top-0 z-50 glass-card px-6 py-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
             <div class="bg-indigo-600 p-2 rounded-lg shadow-lg">
@@ -34,26 +33,28 @@
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button id="open-settings" class="w-10 h-10 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center text-slate-500" title="设置 API">
+            <button id="open-settings" class="w-10 h-10 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center text-slate-500" title="API Settings">
                 <i class="fas fa-cog"></i>
             </button>
             <div class="text-[10px] text-slate-400 font-bold uppercase hidden sm:block">
-                赋能每一位学子的升学之路
+                Empowering your journey to elite universities
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Content / 主界面 -->
     <main class="max-w-4xl mx-auto px-4 py-8">
         <div class="flex flex-col glass-card rounded-3xl overflow-hidden shadow-2xl relative">
+            <!-- Status Bar / 状态栏 -->
             <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-4 text-white flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <h2 class="font-bold text-sm">通用咨询终端</h2>
+                    <h2 class="font-bold text-sm">Consultation Terminal</h2>
                 </div>
-                <span class="text-[10px] font-bold uppercase opacity-60">多协议 API 适配已就绪</span>
+                <span id="protocol-indicator" class="text-[10px] font-bold uppercase opacity-60">Ready</span>
             </div>
 
+            <!-- Chat Window / 聊天窗口 -->
             <div id="chat-window" class="chat-container overflow-y-auto p-6 md:p-10 space-y-8 bg-white/50">
                 <div class="flex gap-4">
                     <div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-white shadow-lg shrink-0">
@@ -61,19 +62,19 @@
                     </div>
                     <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[90%]">
                         <p class="text-sm leading-relaxed text-slate-700">
-                            你好！这是一个公益性质的 AI 升学助手。
+                            Hello! Welcome to UniPath AI. I'm here to assist with your university applications.
                             <br><br>
-                            请点击右上角 <i class="fas fa-cog"></i> 配置你的 API 密钥和接口地址后，即可开始提问。支持官方 Gemini 或兼容 OpenAI 格式的第三方转发。
+                            Please click the <i class="fas fa-cog text-indigo-600"></i> icon in the top right to configure your <b>API Key</b> and <b>Endpoint</b>. We support official Gemini and OpenAI-compatible proxies.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Input Area -->
+            <!-- Input Area / 输入区 -->
             <div class="p-6 bg-white border-t border-slate-100">
                 <div class="relative flex items-end gap-3">
                     <div class="flex-1 relative">
-                        <textarea id="user-input" rows="1" class="w-full pl-5 pr-14 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-medium" placeholder="输入你想咨询的内容..."></textarea>
+                        <textarea id="user-input" rows="1" class="w-full pl-5 pr-14 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-medium" placeholder="Ask anything about admissions..."></textarea>
                         <button id="send-btn" class="absolute right-2 bottom-2 p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -83,10 +84,10 @@
         </div>
     </main>
 
-    <!-- Settings Modal -->
+    <!-- Settings Modal / 设置弹窗 -->
     <div id="settings-modal" class="modal px-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h3 class="text-xl font-bold mb-4">API 进阶设置</h3>
+            <h3 class="text-xl font-bold mb-4">API Configuration</h3>
             
             <div class="space-y-4">
                 <div>
@@ -97,18 +98,18 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">API Endpoint (Base URL)</label>
                     <input type="text" id="api-url-input" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500" placeholder="https://generativelanguage.googleapis.com">
-                    <p class="text-[10px] text-slate-400 mt-1">留空则默认使用 Google Gemini 官方地址</p>
+                    <p class="text-[10px] text-slate-400 mt-1">Leave empty for official Google Gemini API.</p>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Model Name</label>
-                    <input type="text" id="api-model-input" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500" placeholder="gemini-2.5-flash-preview-09-2025">
+                    <input type="text" id="api-model-input" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500" placeholder="gemini-2.0-flash">
                 </div>
             </div>
 
             <div class="flex gap-3 mt-8">
-                <button id="save-settings" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-colors">保存配置</button>
-                <button id="close-settings" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-200 transition-colors">取消</button>
+                <button id="save-settings" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-colors">Save</button>
+                <button id="close-settings" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-200 transition-colors">Cancel</button>
             </div>
         </div>
     </div>
@@ -118,12 +119,133 @@
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
         const settingsModal = document.getElementById('settings-modal');
+        const protocolIndicator = document.getElementById('protocol-indicator');
         
         const apiKeyInput = document.getElementById('api-key-input');
         const apiUrlInput = document.getElementById('api-url-input');
         const apiModelInput = document.getElementById('api-model-input');
 
-        // 初始化配置
+        // Initial Configuration from LocalStorage
         let config = {
             key: localStorage.getItem('unipath_api_key') || "",
-            url: localStorage.getItem('unipath_api_url') || "https
+            url: localStorage.getItem('unipath_api_url') || "https://generativelanguage.googleapis.com",
+            model: localStorage.getItem('unipath_api_model') || "gemini-2.0-flash"
+        };
+
+        // Fill Form
+        apiKeyInput.value = config.key;
+        apiUrlInput.value = config.url;
+        apiModelInput.value = config.model;
+        updateProtocolLabel();
+
+        const systemPrompt = `You are an expert university admissions consultant for 27fall applicants. Focus on G5 (UK) and Ivy League (US). Provide concise, strategic, and professional advice. Always keep a mentor-like tone.`;
+
+        // Modal Logic
+        document.getElementById('open-settings').onclick = () => settingsModal.classList.add('active');
+        document.getElementById('close-settings').onclick = () => settingsModal.classList.remove('active');
+        
+        document.getElementById('save-settings').onclick = () => {
+            config.key = apiKeyInput.value.trim();
+            config.url = apiUrlInput.value.trim() || "https://generativelanguage.googleapis.com";
+            config.model = apiModelInput.value.trim() || "gemini-2.0-flash";
+            
+            localStorage.setItem('unipath_api_key', config.key);
+            localStorage.setItem('unipath_api_url', config.url);
+            localStorage.setItem('unipath_api_model', config.model);
+            
+            settingsModal.classList.remove('active');
+            updateProtocolLabel();
+            appendMessage('ai', "Configuration updated. Model: " + config.model);
+        };
+
+        function updateProtocolLabel() {
+            const isGemini = config.url.includes('googleapis.com');
+            protocolIndicator.innerText = isGemini ? "Gemini Official" : "OpenAI Compatible Proxy";
+        }
+
+        async function callAI(message) {
+            if (!config.key) return "Error: Please configure your API Key in settings first.";
+
+            const isGeminiOfficial = config.url.includes('googleapis.com');
+            let fetchUrl, payload, headers;
+
+            try {
+                if (isGeminiOfficial) {
+                    // Google Gemini API Protocol
+                    fetchUrl = `${config.url.replace(/\/$/, '')}/v1beta/models/${config.model}:generateContent?key=${config.key}`;
+                    payload = {
+                        contents: [{ parts: [{ text: message }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        tools: [{ "google_search": {} }]
+                    };
+                    headers = { 'Content-Type': 'application/json' };
+                } else {
+                    // OpenAI Chat Completion Protocol
+                    fetchUrl = `${config.url.replace(/\/$/, '')}/v1/chat/completions`;
+                    payload = {
+                        model: config.model,
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: message }
+                        ]
+                    };
+                    headers = { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${config.key}`
+                    };
+                }
+
+                const response = await fetch(fetchUrl, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) throw new Error(data.error.message || "API Error Occurred");
+                
+                if (isGeminiOfficial) {
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response content received.";
+                } else {
+                    return data.choices?.[0]?.message?.content || "No response content received.";
+                }
+            } catch (e) {
+                return `Connection Failed: ${e.message}. Please verify your Endpoint and Key.`;
+            }
+        }
+
+        function appendMessage(role, text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = `flex gap-4 ${role === 'user' ? 'justify-end' : ''}`;
+            const html = role === 'ai' 
+                ? `<div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-white shadow-lg shrink-0"><i class="fas fa-robot"></i></div>
+                   <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[90%] text-sm leading-relaxed text-slate-700">${text.replace(/\n/g, '<br>')}</div>`
+                : `<div class="bg-indigo-600 p-5 rounded-2xl rounded-tr-none shadow-lg text-white max-w-[85%] text-sm font-medium leading-relaxed">${text}</div>`;
+            wrapper.innerHTML = html;
+            chatWindow.appendChild(wrapper);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        async function handleSend() {
+            const text = userInput.value.trim();
+            if (!text) return;
+            appendMessage('user', text);
+            userInput.value = '';
+            
+            const typing = document.createElement('div');
+            typing.id = 'temp-typing';
+            typing.className = 'flex gap-2 text-xs text-slate-400 pl-14 items-center';
+            typing.innerHTML = `<span>AI is searching and thinking</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>`;
+            chatWindow.appendChild(typing);
+            
+            const res = await callAI(text);
+            typing.remove();
+            appendMessage('ai', res);
+        }
+
+        sendBtn.onclick = handleSend;
+        userInput.onkeypress = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
+    </script>
+</body>
+</html>
