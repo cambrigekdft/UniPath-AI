@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniPath AI - 公益升学助手</title>
-    <!-- 引入样式与图标 -->
+    <title>UniPath AI - Non-Profit Admissions Mentor</title>
+    <!-- Styles & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入 Markdown 渲染库 -->
+    <!-- Markdown Rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background: #f8fafc; }
         .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
-        .chat-container { height: calc(100vh - 240px); min-height: 400px; }
+        .chat-container { height: calc(100vh - 300px); min-height: 400px; }
         .typing-dot { animation: typing 1.4s infinite; }
         @keyframes typing { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
         ::-webkit-scrollbar { width: 6px; }
@@ -30,11 +30,13 @@
         @keyframes fadeInRight { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
         .animate-in-left { animation: fadeInLeft 0.3s ease-out; }
         .animate-in-right { animation: fadeInRight 0.3s ease-out; }
+        .suggestion-chip { cursor: pointer; transition: all 0.2s; border: 1px solid #e2e8f0; }
+        .suggestion-chip:hover { border-color: #4f46e5; background: #f5f3ff; color: #4f46e5; }
     </style>
 </head>
 <body class="text-slate-800">
 
-    <!-- Header 导航栏 -->
+    <!-- Header Navigation -->
     <nav class="sticky top-0 z-50 glass-card px-6 py-4 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-2 cursor-pointer" onclick="location.reload()">
             <div class="bg-indigo-600 p-2 rounded-lg shadow-lg">
@@ -42,78 +44,124 @@
             </div>
             <div>
                 <h1 class="font-bold text-xl tracking-tight text-slate-900">UniPath <span class="text-indigo-600">AI</span></h1>
-                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">公益升学咨询平台</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Non-Profit Admissions Platform</p>
             </div>
         </div>
-        <div class="flex items-center gap-4">
-            <button id="open-settings" class="w-10 h-10 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center text-slate-500 btn-active" title="设置中心">
+        <div class="flex items-center gap-3">
+            <button id="share-btn" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-sm font-semibold hover:bg-slate-200 transition-all btn-active">
+                <i class="fas fa-share-alt"></i>
+                <span>Share</span>
+            </button>
+            <button id="open-settings" class="w-10 h-10 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center text-slate-500 btn-active" title="Settings">
                 <i class="fas fa-cog text-lg"></i>
             </button>
-            <div class="text-[10px] text-slate-400 font-bold uppercase hidden sm:block">
-                Empowering your journey to elite universities
-            </div>
         </div>
     </nav>
 
-    <!-- Main Content 主界面 -->
-    <main class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Core Value Proposition -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-indigo-500">
+                <div class="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-slate-900 uppercase">Global Strategy</h3>
+                    <p class="text-[10px] text-slate-500">Expertise in UK, US, HK, and SG admissions</p>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-emerald-500">
+                <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-slate-900 uppercase">Data-Driven</h3>
+                    <p class="text-[10px] text-slate-500">Evidence-based profile positioning</p>
+                </div>
+            </div>
+            <div class="glass-card p-4 rounded-2xl flex items-center gap-3 border-l-4 border-amber-500">
+                <div class="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <div>
+                    <h3 class="text-xs font-bold text-slate-900 uppercase">Pro Bono</h3>
+                    <p class="text-[10px] text-slate-500">Dedicated to educational equity for all</p>
+                </div>
+            </div>
+        </div>
+
         <div class="flex flex-col glass-card rounded-3xl overflow-hidden shadow-2xl relative">
-            <!-- 状态条 -->
+            <!-- Status Bar -->
             <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-3 text-white flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
                     <h2 class="font-bold text-xs tracking-wider uppercase">Consultation Terminal</h2>
                 </div>
-                <span id="protocol-indicator" class="text-[10px] font-bold uppercase opacity-60">Initializing...</span>
+                <span id="protocol-indicator" class="text-[10px] font-bold uppercase opacity-60">System Online</span>
             </div>
 
-            <!-- 聊天窗口 -->
+            <!-- Chat Window -->
             <div id="chat-window" class="chat-container overflow-y-auto p-6 md:p-10 space-y-8 bg-white/50">
                 <div class="flex gap-4 animate-in-left">
                     <div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-white shadow-lg shrink-0">
-                        <i class="fas fa-seedling"></i>
+                        <i class="fas fa-robot"></i>
                     </div>
                     <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[90%]">
                         <div class="text-sm leading-relaxed text-slate-700 message-content">
-                            <p><strong>你好！欢迎使用 UniPath AI。</strong></p>
-                            <p>我是你的升学战略顾问。在开始对话前，请点击右上角的 <i class="fas fa-cog text-indigo-600"></i> 图标配置你的 API。我们支持官方 Gemini 或任何兼容 OpenAI 格式的转发接口。</p>
+                            <p><strong>Welcome to UniPath AI.</strong></p>
+                            <p>I am your global admissions consultant. I can help you with:</p>
+                            <ul class="mt-2 text-xs text-slate-500 list-disc pl-4 space-y-1">
+                                <li>Customizing application timelines (UK/US/HK/SG)</li>
+                                <li>Major selection and interdisciplinary profiling</li>
+                                <li>Drafting strategic essays and activity lists</li>
+                            </ul>
+                            <p class="mt-3 text-xs italic text-slate-400">Please provide your background (curriculum, grades, interests) to get started.</p>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <span class="suggestion-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-white shadow-sm" onclick="sendQuickMessage('Help me choose between UK and US application paths.')">UK vs US Strategy</span>
+                                <span class="suggestion-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-white shadow-sm" onclick="sendQuickMessage('How should I plan my activities for an Engineering major?')">Activity Planning</span>
+                                <span class="suggestion-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-white shadow-sm" onclick="sendQuickMessage('What is a competitive IELTS/TOEFL score for Ivy League schools?')">Score Requirements</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 输入区 -->
+            <!-- Input Area -->
             <div class="p-6 bg-white border-t border-slate-100">
                 <div class="relative flex items-end gap-3">
                     <div class="flex-1 relative">
-                        <textarea id="user-input" rows="1" class="w-full pl-5 pr-14 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-medium" placeholder="在此输入你的升学疑问..."></textarea>
+                        <textarea id="user-input" rows="1" class="w-full pl-5 pr-14 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all resize-none text-sm font-medium" placeholder="Describe your background or ask a question..."></textarea>
                         <button id="send-btn" class="absolute right-2 bottom-2 p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg btn-active">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
                 </div>
+                <p class="text-center text-[10px] text-slate-400 mt-4 uppercase tracking-tighter">
+                    Mission: Promoting Educational Access Through AI
+                </p>
             </div>
         </div>
     </main>
 
-    <!-- 设置弹窗 -->
+    <!-- Settings Modal -->
     <div id="settings-modal" class="modal px-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-slate-900">接口配置</h3>
-                <i class="fas fa-key text-indigo-600 opacity-50"></i>
+                <h3 class="text-xl font-bold text-slate-900">API Configuration</h3>
+                <i class="fas fa-shield-alt text-indigo-600 opacity-50"></i>
             </div>
             
             <div class="space-y-5">
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2 tracking-wider">API Key</label>
-                    <input type="password" id="api-key-input" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 transition-all" placeholder="粘贴你的 sk-...">
+                    <input type="password" id="api-key-input" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 transition-all" placeholder="Enter your Gemini or OpenAI API Key">
                 </div>
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 tracking-wider">API Endpoint (Base URL)</label>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2 tracking-wider">API Endpoint</label>
                     <input type="text" id="api-url-input" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 transition-all" placeholder="https://generativelanguage.googleapis.com">
-                    <p class="text-[10px] text-slate-400 mt-2 italic">官方 Gemini 请保持默认；第三方转发请填写代理地址。</p>
+                    <p class="text-[10px] text-slate-400 mt-2 italic">Support official Google Gemini and OpenAI-compatible proxies.</p>
                 </div>
 
                 <div>
@@ -123,41 +171,47 @@
             </div>
 
             <div class="flex gap-3 mt-10">
-                <button id="save-settings" class="flex-1 bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 btn-active">保存配置</button>
-                <button id="close-settings" class="flex-1 bg-slate-100 text-slate-600 py-3.5 rounded-xl font-bold hover:bg-slate-200 transition-all btn-active">取消</button>
+                <button id="save-settings" class="flex-1 bg-indigo-600 text-white py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 btn-active">Apply Changes</button>
+                <button id="close-settings" class="flex-1 bg-slate-100 text-slate-600 py-3.5 rounded-xl font-bold hover:bg-slate-200 transition-all btn-active">Close</button>
             </div>
+            <p class="text-center text-[10px] text-slate-300 mt-4">Privacy: Your API key is stored locally and never sent to our servers.</p>
         </div>
     </div>
 
     <script>
-        // 确保 DOM 加载后再运行脚本
         document.addEventListener('DOMContentLoaded', function() {
             const chatWindow = document.getElementById('chat-window');
             const userInput = document.getElementById('user-input');
             const sendBtn = document.getElementById('send-btn');
             const settingsModal = document.getElementById('settings-modal');
             const protocolIndicator = document.getElementById('protocol-indicator');
+            const shareBtn = document.getElementById('share-btn');
             
             const apiKeyInput = document.getElementById('api-key-input');
             const apiUrlInput = document.getElementById('api-url-input');
             const apiModelInput = document.getElementById('api-model-input');
 
-            // --- 默认配置 ---
+            // --- Config ---
             let config = {
                 key: localStorage.getItem('unipath_api_key') || "",
                 url: localStorage.getItem('unipath_api_url') || "https://generativelanguage.googleapis.com",
                 model: localStorage.getItem('unipath_api_model') || "gemini-2.0-flash"
             };
 
-            // 填充表单
             apiKeyInput.value = config.key;
             apiUrlInput.value = config.url;
             apiModelInput.value = config.model;
             updateProtocolLabel();
 
-            const systemPrompt = `你是一个公益升学咨询专家，专注于27fall申请。擅长G5(英国)和常青藤(美国)申请策略。请提供简洁、专业、战略性的建议。使用导师般的语气，并使用Markdown格式回答。`;
+            // General Admissions Strategy System Prompt
+            const systemPrompt = `Role: Professional Global Admissions Strategic Consultant.
+Objective: Provide strategic, non-biased advice for high school students applying to top universities worldwide (UK, US, HK, SG, etc.).
+Knowledge: Expertise in A-Level, IB, AP, and various international curricula.
+Interaction: Professional, insightful, and structured. Use Markdown.
+Language: Default to Professional English, but match the user's language if they use a different one.
+Mission: Support educational equity by providing pro bono advisory services through AI.`;
 
-            // --- 界面控制 ---
+            // --- UI ---
             document.getElementById('open-settings').onclick = () => settingsModal.classList.add('active');
             document.getElementById('close-settings').onclick = () => settingsModal.classList.remove('active');
             
@@ -172,24 +226,38 @@
                 
                 settingsModal.classList.remove('active');
                 updateProtocolLabel();
-                appendMessage('ai', "✅ **配置已生效**。当前模型：" + config.model);
+                appendMessage('ai', "✅ **System ready**. Please describe your academic background or ask your admission questions.");
+            };
+
+            shareBtn.onclick = () => {
+                const url = window.location.href;
+                const tempInput = document.createElement("input");
+                document.body.appendChild(tempInput);
+                tempInput.value = url;
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+                
+                const span = shareBtn.querySelector('span');
+                const originalText = span.innerText;
+                span.innerText = "Link Copied!";
+                setTimeout(() => span.innerText = originalText, 2000);
             };
 
             function updateProtocolLabel() {
                 const isGemini = config.url.includes('googleapis.com');
-                protocolIndicator.innerText = isGemini ? "Gemini Direct" : "OpenAI Proxy Mode";
+                protocolIndicator.innerText = isGemini ? "Gemini Protocol" : "OpenAI/Proxy Protocol";
             }
 
-            // --- 核心 AI 请求逻辑 ---
+            // --- AI Logic ---
             async function callAI(message) {
-                if (!config.key) return "⚠️ **错误**：请先点击右上角设置图标配置 API Key 后再开始咨询。";
+                if (!config.key) return "⚠️ **Configuration Needed**: Please open settings to add your API Key to begin.";
 
                 const isGeminiOfficial = config.url.includes('googleapis.com');
                 let fetchUrl, payload, headers;
 
                 try {
                     if (isGeminiOfficial) {
-                        // 官方 Gemini 协议
                         fetchUrl = `${config.url.replace(/\/$/, '')}/v1beta/models/${config.model}:generateContent?key=${config.key}`;
                         payload = {
                             contents: [{ parts: [{ text: message }] }],
@@ -198,7 +266,6 @@
                         };
                         headers = { 'Content-Type': 'application/json' };
                     } else {
-                        // 标准 OpenAI 协议 (适配转发)
                         fetchUrl = `${config.url.replace(/\/$/, '')}/v1/chat/completions`;
                         payload = {
                             model: config.model,
@@ -213,32 +280,24 @@
                         };
                     }
 
-                    const response = await fetch(fetchUrl, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify(payload)
-                    });
-                    
+                    const response = await fetch(fetchUrl, { method: 'POST', headers: headers, body: JSON.stringify(payload) });
                     const data = await response.json();
-                    if (data.error) throw new Error(data.error.message || "接口调用失败");
+                    
+                    if (data.error) throw new Error(data.error.message || "API error occurred");
                     
                     if (isGeminiOfficial) {
-                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "抱歉，我无法生成回复内容。";
+                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
                     } else {
-                        return data.choices?.[0]?.message?.content || "抱歉，我无法生成回复内容。";
+                        return data.choices?.[0]?.message?.content || "No response generated.";
                     }
                 } catch (e) {
-                    console.error("AI Request Error:", e);
-                    return `❌ **连接失败**：${e.message}。请检查 API 信息或网络环境（若使用官方接口请确保网络畅通）。`;
+                    return `❌ **Connection Error**: ${e.message}. Check your API Key and Endpoint.`;
                 }
             }
 
-            // --- 聊天渲染逻辑 ---
             function appendMessage(role, text) {
                 const wrapper = document.createElement('div');
                 wrapper.className = `flex gap-4 ${role === 'user' ? 'justify-end animate-in-right' : 'animate-in-left'}`;
-                
-                // AI 使用 marked 渲染 Markdown，用户使用纯文本
                 const contentHtml = role === 'ai' ? marked.parse(text) : text;
                 
                 const html = role === 'ai' 
@@ -251,18 +310,18 @@
                 chatWindow.scrollTo({ top: chatWindow.scrollHeight, behavior: 'smooth' });
             }
 
-            async function handleSend() {
-                const text = userInput.value.trim();
+            async function handleSend(textOverride = null) {
+                const text = textOverride || userInput.value.trim();
                 if (!text) return;
                 
                 appendMessage('user', text);
-                userInput.value = '';
-                userInput.style.height = 'auto'; // 重置高度
+                if (!textOverride) userInput.value = '';
+                userInput.style.height = 'auto';
                 
                 const typing = document.createElement('div');
                 typing.id = 'temp-typing';
                 typing.className = 'flex gap-2 text-[10px] font-bold text-slate-400 pl-14 items-center uppercase';
-                typing.innerHTML = `<span>AI Advisor is thinking</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>`;
+                typing.innerHTML = `<span>Mentor is thinking</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>`;
                 chatWindow.appendChild(typing);
                 chatWindow.scrollTop = chatWindow.scrollHeight;
                 
@@ -271,16 +330,11 @@
                 appendMessage('ai', res);
             }
 
-            // 事件绑定
-            sendBtn.onclick = handleSend;
+            window.sendQuickMessage = (msg) => handleSend(msg);
+            sendBtn.onclick = () => handleSend();
             userInput.onkeydown = (e) => { 
-                if(e.key === 'Enter' && !e.shiftKey) { 
-                    e.preventDefault(); 
-                    handleSend(); 
-                } 
+                if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } 
             };
-
-            // 输入框自适应高度
             userInput.oninput = function() {
                 this.style.height = 'auto';
                 this.style.height = (this.scrollHeight) + 'px';
