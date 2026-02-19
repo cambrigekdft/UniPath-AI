@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="flex items-center gap-4">
-            <button id="open-settings" class="w-10 h-10 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center text-slate-500" title="设置 API Key">
+            <button id="open-settings" class="w-10 h-10 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center text-slate-500" title="设置 API">
                 <i class="fas fa-cog"></i>
             </button>
             <div class="text-[10px] text-slate-400 font-bold uppercase hidden sm:block">
@@ -51,7 +51,7 @@
                     <span class="flex h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
                     <h2 class="font-bold text-sm">通用咨询终端</h2>
                 </div>
-                <span class="text-[10px] font-bold uppercase opacity-60">实时联网检索已就绪</span>
+                <span class="text-[10px] font-bold uppercase opacity-60">多协议 API 适配已就绪</span>
             </div>
 
             <div id="chat-window" class="chat-container overflow-y-auto p-6 md:p-10 space-y-8 bg-white/50">
@@ -63,7 +63,7 @@
                         <p class="text-sm leading-relaxed text-slate-700">
                             你好！这是一个公益性质的 AI 升学助手。
                             <br><br>
-                            请点击右上角 <i class="fas fa-cog"></i> 配置你的 Gemini API Key 后，即可开始提问。
+                            请点击右上角 <i class="fas fa-cog"></i> 配置你的 API 密钥和接口地址后，即可开始提问。支持官方 Gemini 或兼容 OpenAI 格式的第三方转发。
                         </p>
                     </div>
                 </div>
@@ -85,11 +85,28 @@
 
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal px-4">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl">
-            <h3 class="text-xl font-bold mb-4">API 设置</h3>
-            <p class="text-sm text-slate-500 mb-6">请输入你的 Google Gemini API Key。此密钥仅保存在你的浏览器本地，不会被上传到任何服务器。</p>
-            <input type="password" id="api-key-input" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl mb-6 outline-none focus:border-indigo-500" placeholder="在此输入 API Key...">
-            <div class="flex gap-3">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl overflow-y-auto max-h-[90vh]">
+            <h3 class="text-xl font-bold mb-4">API 进阶设置</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">API Key</label>
+                    <input type="password" id="api-key-input" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500" placeholder="sk-...">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">API Endpoint (Base URL)</label>
+                    <input type="text" id="api-url-input" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500" placeholder="https://generativelanguage.googleapis.com">
+                    <p class="text-[10px] text-slate-400 mt-1">留空则默认使用 Google Gemini 官方地址</p>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Model Name</label>
+                    <input type="text" id="api-model-input" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500" placeholder="gemini-2.5-flash-preview-09-2025">
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-8">
                 <button id="save-settings" class="flex-1 bg-indigo-600 text-white py-3 rounded-xl font-bold hover:bg-indigo-700 transition-colors">保存配置</button>
                 <button id="close-settings" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-200 transition-colors">取消</button>
             </div>
@@ -101,82 +118,12 @@
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
         const settingsModal = document.getElementById('settings-modal');
+        
         const apiKeyInput = document.getElementById('api-key-input');
+        const apiUrlInput = document.getElementById('api-url-input');
+        const apiModelInput = document.getElementById('api-model-input');
 
-        // 从本地存储加载 API Key
-        let currentApiKey = localStorage.getItem('unipath_gemini_key') || "";
-        apiKeyInput.value = currentApiKey;
-
-        const systemPrompt = `你是一个公益升学咨询助手。你的目标是帮助学生理解全球申请流程、院校特点和专业选择。排版规则：1. 禁止使用任何多余符号（如连续#）。2. 保持简洁、客观、导师化语气。3. 使用清晰文本段落。`;
-
-        // 弹窗逻辑
-        document.getElementById('open-settings').onclick = () => settingsModal.classList.add('active');
-        document.getElementById('close-settings').onclick = () => settingsModal.classList.remove('active');
-        document.getElementById('save-settings').onclick = () => {
-            currentApiKey = apiKeyInput.value.trim();
-            localStorage.setItem('unipath_gemini_key', currentApiKey);
-            settingsModal.classList.remove('active');
-            appendMessage('ai', "API Key 已更新并存储。可以开始对话了！");
-        };
-
-        async function callGemini(message) {
-            if (!currentApiKey) return "请先点击右上角设置图标配置 API Key。";
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${currentApiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: message }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                tools: [{ "google_search": {} }]
-            };
-
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    const data = await response.json();
-                    if (data.error) throw new Error(data.error.message);
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
-                } catch (e) {
-                    if (i === 4) return `错误: ${e.message || "请求失败"}`;
-                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
-                }
-            }
-        }
-
-        function appendMessage(role, text) {
-            const wrapper = document.createElement('div');
-            wrapper.className = `flex gap-4 ${role === 'user' ? 'justify-end' : ''}`;
-            const html = role === 'ai' 
-                ? `<div class="w-10 h-10 rounded-2xl bg-slate-800 flex items-center justify-center text-white shadow-lg shrink-0"><i class="fas fa-robot"></i></div>
-                   <div class="bg-white p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 max-w-[90%] text-sm leading-relaxed text-slate-700">${text.replace(/\n/g, '<br>')}</div>`
-                : `<div class="bg-indigo-600 p-5 rounded-2xl rounded-tr-none shadow-lg text-white max-w-[85%] text-sm font-medium leading-relaxed">${text}</div>`;
-            wrapper.innerHTML = html;
-            chatWindow.appendChild(wrapper);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        async function handleSend() {
-            const text = userInput.value.trim();
-            if (!text) return;
-            appendMessage('user', text);
-            userInput.value = '';
-            
-            const typing = document.createElement('div');
-            typing.id = 'temp-typing';
-            typing.className = 'flex gap-2 text-xs text-slate-400 pl-14 items-center';
-            typing.innerHTML = `<span>AI 正在思考</span><span class="typing-dot">.</span><span class="typing-dot">.</span><span class="typing-dot">.</span>`;
-            chatWindow.appendChild(typing);
-            
-            const res = await callGemini(text);
-            typing.remove();
-            appendMessage('ai', res);
-        }
-
-        sendBtn.onclick = handleSend;
-        userInput.onkeypress = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } };
-    </script>
-</body>
-</html>
+        // 初始化配置
+        let config = {
+            key: localStorage.getItem('unipath_api_key') || "",
+            url: localStorage.getItem('unipath_api_url') || "https
