@@ -2,49 +2,82 @@ UniPath AI 🚀
 
 UniPath AI is a dedicated non-profit intelligent assistant designed to democratize access to global higher education information. Built with advanced LLM technology and real-time web search capabilities, it serves as a reliable mentor for students navigating the complexities of international applications.
 
-🌟 Overview
+UniPath AI 是一款致力于推动全球高等教育信息民主化的公益性智能助手。结合先进的大语言模型与实时联网检索技术，为学子提供专业、实时的升学导航与咨询服务。
 
-This project provides an AI-powered global admissions co-pilot. It aims to bridge the information gap by providing students with free, real-time insights into university rankings, major selections, and application strategies.
+🌟 Key Features (核心特性)
 
-✨ Key Features
+🌐 Multi-Protocol Support
+Fully compatible with official Google Gemini API and OpenAI-format third-party API proxies.
 
-🌍 Global Reach: Real-time access to the latest data from major world rankings (QS, THE, U.S. News, ARWU) and up-to-date university admission policies.
+(支持官方 Gemini 及兼容 OpenAI 格式的第三方转发接口)
 
-🎯 Strategic Guidance: Personalized advice on major selection and application positioning based on current trends.
+🌍 Real-time Global Search
+Accesses the latest data from QS, THE, U.S. News, and real-time university admission policies via Google Search grounding.
 
-✍️ Narrative Support: AI-driven inspiration and logical refinement for personal statements (PS) and supplemental essays.
+(动态调取全球权威排名及各大院校最新政策，消除留学信息差)
 
-📱 Accessibility First: A clean, ad-free, and distraction-free interface designed for a high-quality consultation experience.
+🎯 Strategic Guidance
+Provides personalized positioning and logic refinement for interdisciplinary applications (e.g., Humanities + AI).
 
-🤝 Non-Profit Mission: Committed to empowering every student's journey toward their dream university, ensuring equal access to education consulting regardless of background.
+(针对复合背景申请提供个性化的专业定位与逻辑建议)
 
-🛠️ Tech Stack
+🔒 Privacy First
+All API keys and configurations are stored locally in the user's browser (LocalStorage). No backend, no data collection.
 
-Core Engine: Powered by Gemini 2.5 Flash, ensuring high-speed and precise logical reasoning.
+(配置仅保存在本地浏览器，项目不设后端，确保数据隐私安全)
 
-UI/UX: Responsive minimalist design built with Tailwind CSS and Inter typography.
+🔑 How to Get API Keys (获取 API 密钥)
 
-Information Retrieval: Integrated Google Search Grounding technology.
+If you don't have an API Key, you can obtain one through the following channels:
 
-📖 How to Use
+(如果你还没有密钥，可通过以下途径获取：)
 
-Clone the Repository:
+1. Official Channels (官方渠道)
 
-git clone [https://github.com/cambrigekdft/UniPath-AI.git](https://github.com/cambrigekdft/UniPath-AI.git)
+Google AI Studio (Gemini): https://aistudio.google.com/
 
+Recommended for its generous free tier (Gemini 2.0 Flash). (首选推荐，免费额度充足)
 
-Run Locally: Simply open index.html in any modern web browser.
+OpenAI (GPT): https://platform.openai.com/
 
-API Configuration:
+Industry standard, though requires international payment methods. (行业标准，但有支付门槛)
 
-Open index.html in a text editor.
+2. Third-party Proxies (推荐转发)
 
-Locate const apiKey = ""; and insert your Gemini API Key.
+Stable and accessible proxies supporting Alipay/WeChat: (适合国内网络直接访问，支持微信/支付宝：)
 
-Save and refresh the page.
+OpenRouter: https://openrouter.ai/ (Supports almost all major models).
 
-📄 License
+SiliconFlow: https://siliconflow.cn/ (High-speed domestic response).
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+📖 How to Use (使用指南)
 
-Empowering every student's journey toward their dream university.
+1. Live Demo (在线体验)
+
+Visit the official live site:
+
+👉 https://cambrigekdft.github.io/UniPath-AI/
+
+2. Configure API (配置接口)
+
+Click the Settings (Gear icon) in the top-right corner to set up your connection:
+
+(点击页面右上角的 设置（齿轮图标） 进行配置：)
+
+API Key: Enter your personal secret key. (输入您的密钥)
+
+API Endpoint (Base URL):
+
+Official Gemini: Leave blank or keep default. (官方接口：留空或保持默认)
+
+Third-party Proxy: Enter the Base URL (e.g., https://api.your-proxy.com). (第三方转发地址)
+
+Model Name: Specify the model identifier (e.g., gemini-2.0-flash or gpt-4o). (填写模型代码)
+
+📄 License (开源协议)
+
+This project is licensed under the MIT License. Feel free to use, modify, and distribute.
+
+(本项目采用 MIT 协议授权，欢迎自由使用、修改和分发)
+
+Empowering every student's journey toward their dream university. 赋能每一位学子的升学之路。
